@@ -1,0 +1,7 @@
+{
+  "High Voltage Test": 25000,
+  "Partial Discharge Test": 35000,
+  "Mechanical Test": 15000,
+  "Water Penetration Test": 28000,
+  "Impulse Voltage Test": 40000
+}

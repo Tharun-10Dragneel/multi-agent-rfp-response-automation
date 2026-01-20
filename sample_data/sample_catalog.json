@@ -1,0 +1,391 @@
+[
+  {
+    "sku": "CAB-HV-11KV-AL-70",
+    "product_name": "11 kV XLPE Aluminum Three-Core Cable - 70 sq.mm",
+    "specifications": {
+      "voltage_rating": "11 kV",
+      "conductor": "Aluminum",
+      "size": "70 sq.mm",
+      "cores": 3,
+      "insulation": "XLPE",
+      "armour": "GI Wire"
+    },
+    "price_per_km": 82000
+  },
+  {
+    "sku": "CAB-HV-11KV-CU-70",
+    "product_name": "11 kV XLPE Copper Three-Core Cable - 70 sq.mm",
+    "specifications": {
+      "voltage_rating": "11 kV",
+      "conductor": "Copper",
+      "size": "70 sq.mm",
+      "cores": 3,
+      "insulation": "XLPE",
+      "armour": "GI Wire"
+    },
+    "price_per_km": 98000
+  },
+  {
+    "sku": "CAB-HV-11KV-AL-95",
+    "product_name": "11 kV XLPE Aluminum Three-Core Cable - 95 sq.mm",
+    "specifications": {
+      "voltage_rating": "11 kV",
+      "conductor": "Aluminum",
+      "size": "95 sq.mm",
+      "cores": 3,
+      "insulation": "XLPE",
+      "armour": "GI Wire"
+    },
+    "price_per_km": 92000
+  },
+
+  {
+    "sku": "CAB-HV-11KV-AL-150",
+    "product_name": "11 kV XLPE Aluminum Three-Core Cable - 150 sq.mm",
+    "specifications": {
+      "voltage_rating": "11 kV",
+      "conductor": "Aluminum",
+      "size": "150 sq.mm",
+      "cores": 3,
+      "insulation": "XLPE",
+      "armour": "GI Wire"
+    },
+    "price_per_km": 105000
+  },
+  {
+    "sku": "CAB-HV-11KV-CU-150",
+    "product_name": "11 kV XLPE Copper Three-Core Cable - 150 sq.mm",
+    "specifications": {
+      "voltage_rating": "11 kV",
+      "conductor": "Copper",
+      "size": "150 sq.mm",
+      "cores": 3,
+      "insulation": "XLPE",
+      "armour": "Steel Tape"
+    },
+    "price_per_km": 132000
+  },
+  {
+    "sku": "CAB-HV-11KV-AL-240",
+    "product_name": "11 kV XLPE Aluminum Three-Core Cable - 240 sq.mm",
+    "specifications": {
+      "voltage_rating": "11 kV",
+      "conductor": "Aluminum",
+      "size": "240 sq.mm",
+      "cores": 3,
+      "insulation": "XLPE",
+      "armour": "GI Wire"
+    },
+    "price_per_km": 115000
+  },
+  {
+    "sku": "CAB-HV-11KV-CU-240",
+    "product_name": "11 kV XLPE Copper Three-Core Cable - 240 sq.mm",
+    "specifications": {
+      "voltage_rating": "11 kV",
+      "conductor": "Copper",
+      "size": "240 sq.mm",
+      "cores": 3,
+      "insulation": "XLPE",
+      "armour": "Steel Tape"
+    },
+    "price_per_km": 150000
+  },
+  {
+    "sku": "CAB-HV-11KV-AL-300",
+    "product_name": "11 kV XLPE Aluminum Three-Core Cable - 300 sq.mm",
+    "specifications": {
+      "voltage_rating": "11 kV",
+      "conductor": "Aluminum",
+      "size": "300 sq.mm",
+      "cores": 3,
+      "insulation": "XLPE",
+      "armour": "GI Wire"
+    },
+    "price_per_km": 125000
+  },
+  {
+    "sku": "CAB-HV-11KV-CU-300",
+    "product_name": "11 kV XLPE Copper Three-Core Cable - 300 sq.mm",
+    "specifications": {
+      "voltage_rating": "11 kV",
+      "conductor": "Copper",
+      "size": "300 sq.mm",
+      "cores": 3,
+      "insulation": "XLPE",
+      "armour": "Steel Tape"
+    },
+    "price_per_km": 165000
+  },
+
+  {
+    "sku": "CAB-MV-6.6KV-AL-35",
+    "product_name": "6.6 kV XLPE Aluminum Three-Core Cable - 35 sq.mm",
+    "specifications": {
+      "voltage_rating": "6.6 kV",
+      "conductor": "Aluminum",
+      "size": "35 sq.mm",
+      "cores": 3,
+      "insulation": "XLPE",
+      "armour": "GI Wire"
+    },
+    "price_per_km": 62000
+  },
+  {
+    "sku": "CAB-MV-6.6KV-CU-35",
+    "product_name": "6.6 kV XLPE Copper Three-Core Cable - 35 sq.mm",
+    "specifications": {
+      "voltage_rating": "6.6 kV",
+      "conductor": "Copper",
+      "size": "35 sq.mm",
+      "cores": 3,
+      "insulation": "XLPE",
+      "armour": "Steel Tape"
+    },
+    "price_per_km": 79000
+  },
+  {
+    "sku": "CAB-MV-6.6KV-AL-50",
+    "product_name": "6.6 kV XLPE Aluminum Three-Core Cable - 50 sq.mm",
+    "specifications": {
+      "voltage_rating": "6.6 kV",
+      "conductor": "Aluminum",
+      "size": "50 sq.mm",
+      "cores": 3,
+      "insulation": "XLPE",
+      "armour": "GI Wire"
+    },
+    "price_per_km": 65000
+  },
+
+  {
+    "sku": "CAB-MV-6.6KV-CU-50",
+    "product_name": "6.6 kV XLPE Copper Three-Core Cable - 50 sq.mm",
+    "specifications": {
+      "voltage_rating": "6.6 kV",
+      "conductor": "Copper",
+      "size": "50 sq.mm",
+      "cores": 3,
+      "insulation": "XLPE",
+      "armour": "Steel Tape"
+    },
+    "price_per_km": 81000
+  },
+
+  {
+    "sku": "CAB-HV-22KV-AL-150",
+    "product_name": "22 kV XLPE Aluminum Three-Core Cable - 150 sq.mm",
+    "specifications": {
+      "voltage_rating": "22 kV",
+      "conductor": "Aluminum",
+      "size": "150 sq.mm",
+      "cores": 3,
+      "insulation": "XLPE",
+      "armour": "SWA"
+    },
+    "price_per_km": 175000
+  },
+  {
+    "sku": "CAB-HV-22KV-CU-150",
+    "product_name": "22 kV XLPE Copper Three-Core Cable - 150 sq.mm",
+    "specifications": {
+      "voltage_rating": "22 kV",
+      "conductor": "Copper",
+      "size": "150 sq.mm",
+      "cores": 3,
+      "insulation": "XLPE",
+      "armour": "SWA"
+    },
+    "price_per_km": 205000
+  },
+
+  {
+    "sku": "CAB-HV-22KV-AL-240",
+    "product_name": "22 kV XLPE Aluminum Three-Core Cable - 240 sq.mm",
+    "specifications": {
+      "voltage_rating": "22 kV",
+      "conductor": "Aluminum",
+      "size": "240 sq.mm",
+      "cores": 3,
+      "insulation": "XLPE",
+      "armour": "SWA"
+    },
+    "price_per_km": 185000
+  },
+
+  {
+    "sku": "CAB-HV-22KV-CU-240",
+    "product_name": "22 kV XLPE Copper Three-Core Cable - 240 sq.mm",
+    "specifications": {
+      "voltage_rating": "22 kV",
+      "conductor": "Copper",
+      "size": "240 sq.mm",
+      "cores": 3,
+      "insulation": "XLPE",
+      "armour": "SWA"
+    },
+    "price_per_km": 220000
+  },
+
+  {
+    "sku": "CAB-HV-22KV-AL-300",
+    "product_name": "22 kV XLPE Aluminum Three-Core Cable - 300 sq.mm",
+    "specifications": {
+      "voltage_rating": "22 kV",
+      "conductor": "Aluminum",
+      "size": "300 sq.mm",
+      "cores": 3,
+      "insulation": "XLPE",
+      "armour": "SWA"
+    },
+    "price_per_km": 198000
+  },
+
+  {
+    "sku": "CAB-HV-22KV-CU-300",
+    "product_name": "22 kV XLPE Copper Three-Core Cable - 300 sq.mm",
+    "specifications": {
+      "voltage_rating": "22 kV",
+      "conductor": "Copper",
+      "size": "300 sq.mm",
+      "cores": 3,
+      "insulation": "XLPE",
+      "armour": "SWA"
+    },
+    "price_per_km": 235000
+  },
+  {
+    "sku": "CAB-HV-33KV-AL-95",
+    "product_name": "33 kV XLPE Aluminum Three-Core Cable - 95 sq.mm",
+    "specifications": {
+      "voltage_rating": "33 kV",
+      "conductor": "Aluminum",
+      "size": "95 sq.mm",
+      "cores": 3,
+      "insulation": "XLPE",
+      "armour": "SWA"
+    },
+    "price_per_km": 170000
+  },
+  {
+    "sku": "CAB-HV-33KV-CU-95",
+    "product_name": "33 kV XLPE Copper Three-Core Cable - 95 sq.mm",
+    "specifications": {
+      "voltage_rating": "33 kV",
+      "conductor": "Copper",
+      "size": "95 sq.mm",
+      "cores": 3,
+      "insulation": "XLPE",
+      "armour": "SWA"
+    },
+    "price_per_km": 210000
+  },
+  {
+    "sku": "CAB-HV-33KV-AL-185",
+    "product_name": "33 kV XLPE Aluminum Three-Core Cable - 185 sq.mm",
+    "specifications": {
+      "voltage_rating": "33 kV",
+      "conductor": "Aluminum",
+      "size": "185 sq.mm",
+      "cores": 3,
+      "insulation": "XLPE",
+      "armour": "SWA"
+    },
+    "price_per_km": 240000
+  },
+
+  {
+    "sku": "CAB-HV-33KV-CU-185",
+    "product_name": "33 kV XLPE Copper Three-Core Cable - 185 sq.mm",
+    "specifications": {
+      "voltage_rating": "33 kV",
+      "conductor": "Copper",
+      "size": "185 sq.mm",
+      "cores": 3,
+      "insulation": "XLPE",
+      "armour": "Steel Tape"
+    },
+    "price_per_km": 285000
+  },
+
+  {
+    "sku": "CAB-HV-33KV-AL-240",
+    "product_name": "33 kV XLPE Aluminum Three-Core Cable - 240 sq.mm",
+    "specifications": {
+      "voltage_rating": "33 kV",
+      "conductor": "Aluminum",
+      "size": "240 sq.mm",
+      "cores": 3,
+      "insulation": "XLPE",
+      "armour": "SWA"
+    },
+    "price_per_km": 255000
+  },
+  {
+    "sku": "CAB-HV-33KV-CU-240",
+    "product_name": "33 kV XLPE Copper Three-Core Cable - 240 sq.mm",
+    "specifications": {
+      "voltage_rating": "33 kV",
+      "conductor": "Copper",
+      "size": "240 sq.mm",
+      "cores": 3,
+      "insulation": "XLPE",
+      "armour": "Steel Tape"
+    },
+    "price_per_km": 305000
+  },
+
+  {
+    "sku": "CAB-HV-33KV-AL-300",
+    "product_name": "33 kV XLPE Aluminum Three-Core Cable - 300 sq.mm",
+    "specifications": {
+      "voltage_rating": "33 kV",
+      "conductor": "Aluminum",
+      "size": "300 sq.mm",
+      "cores": 3,
+      "insulation": "XLPE",
+      "armour": "SWA"
+    },
+    "price_per_km": 275000
+  },
+  {
+    "sku": "CAB-HV-33KV-CU-300",
+    "product_name": "33 kV XLPE Copper Three-Core Cable - 300 sq.mm",
+    "specifications": {
+      "voltage_rating": "33 kV",
+      "conductor": "Copper",
+      "size": "300 sq.mm",
+      "cores": 3,
+      "insulation": "XLPE",
+      "armour": "Steel Tape"
+    },
+    "price_per_km": 335000
+  },
+
+  {
+    "sku": "CAB-HV-33KV-AL-400",
+    "product_name": "33 kV XLPE Aluminum Three-Core Cable - 400 sq.mm",
+    "specifications": {
+      "voltage_rating": "33 kV",
+      "conductor": "Aluminum",
+      "size": "400 sq.mm",
+      "cores": 3,
+      "insulation": "XLPE",
+      "armour": "SWA"
+    },
+    "price_per_km": 310000
+  },
+  {
+    "sku": "CAB-HV-33KV-CU-400",
+    "product_name": "33 kV XLPE Copper Three-Core Cable - 400 sq.mm",
+    "specifications": {
+      "voltage_rating": "33 kV",
+      "conductor": "Copper",
+      "size": "400 sq.mm",
+      "cores": 3,
+      "insulation": "XLPE",
+      "armour": "Steel Tape"
+    },
+    "price_per_km": 370000
+  }
+]

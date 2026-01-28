@@ -58,6 +58,8 @@ async def startup_event():
     """Load initial data on startup"""
     global oem_catalog_db, test_pricing_db
 
+    REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+
     if os.path.exists('data/catalog.json'):
         with open('data/catalog.json', 'r') as f:
             oem_catalog_db = json.load(f)

@@ -26,7 +26,7 @@ function getEnvVar(): SupabaseEnv {
 
 export async function createSupabaseServerClient() {
     const { supabaseUrl, supabaseAnonKey } = getEnvVar();
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
 
     return createServerClient(supabaseUrl, supabaseAnonKey, { 
         cookies: {

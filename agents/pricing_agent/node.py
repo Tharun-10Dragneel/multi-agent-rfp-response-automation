@@ -152,7 +152,7 @@ Provide a concise pricing summary with key assumptions and next steps.
 
         return {
             "messages": [AIMessage(content=response.content)],
-            "pricing_analysis": {"rfp_id": selected_rfp.get("rfp_id"), "analysis": response.content, "inputs": pricing_summary},
+            "pricing_analysis": {"rfp_id": get_rfp_id(selected_rfp), "analysis": response.content, "inputs": pricing_summary},
             "current_step": WorkflowStep.COMPLETE,
             "next_node": NodeName.MAIN_AGENT
         }

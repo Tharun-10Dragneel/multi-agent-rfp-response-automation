@@ -1,5 +1,5 @@
-from fastapi import APIRouter, HTTPException, UploadFile, File
-from typing import List
+from fastapi import APIRouter, HTTPException, UploadFile, File, Query
+from typing import List, Optional
 import json
 from datetime import datetime
 
@@ -9,10 +9,31 @@ from ..utils import save_catalog
 
 router = APIRouter(prefix="/api/catalog", tags=["catalog"])
 
-@router.get("", response_model=List[OEMProduct])
-async def get_catalog():
-    """Get all OEM products from catalog"""
-    return oem_catalog_db
+@router.get("")
+async def get_catalog(
+    page: int = Query(1, ge=1, description="Page number"),
+    size: int = Query(20, ge=1, le=200, description="Items per page"),
+    category: Optional[str] = Query(None, description="Filter by category")
+):
+    """Get paginated OEM products from catalog with optional category filter"""
+    filtered = oem_catalog_db
+    if category:
+        filtered = [p for p in oem_catalog_db if p.get("category", "").lower() == category.lower()]
+
+    total = len(filtered)
+    start = (page - 1) * size
+    end = start + size
+    items = filtered[start:end]
+
+    return {
+        "items": items,
+        "pagination": {
+            "page": page,
+            "size": size,
+            "total": total,
+            "pages": (total + size - 1) // size,
+        },
+    }
 
 @router.post("", response_model=OEMProduct)
 async def add_product(product: OEMProduct):

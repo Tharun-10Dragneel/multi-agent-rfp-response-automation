@@ -33,7 +33,7 @@ import {
 
 export default function Dashboard() {
   const router = useRouter();
-  const { isAuthenticated, user, isGuest, canEdit, canCreate } = useAuth();
+  const { isAuthenticated, user, isGuest, canEdit, canCreate, transitionFromGuest } = useAuth();
   const [stats] = useState(mockDashboardStats);
   const [agents] = useState(mockAgentStatus);
   const [rfps, setRfps] = useState(mockRFPs);
@@ -86,6 +86,11 @@ export default function Dashboard() {
       title: "Download",
       description: `Preparing response for ${rfp.id}...`,
     });
+  };
+
+  const handleSignUpFromGuest = () => {
+    transitionFromGuest();
+    router.push("/signup");
   };
 
   return (
@@ -152,7 +157,7 @@ export default function Dashboard() {
                   <Button 
                     size="sm" 
                     variant="outline" 
-                    onClick={() => router.push("/signup")}
+                    onClick={handleSignUpFromGuest}
                     className="border-border hover:bg-primary/10 hover:border-primary hover:text-primary transition-all duration-200"
                   >
                     <Sparkles className="w-4 h-4 mr-2" />

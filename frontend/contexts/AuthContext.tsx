@@ -77,6 +77,14 @@ export function AuthProvider({ children }) {
     setLoading(false);
   }, []);
 
+  // Transition from guest to login/signup
+  const transitionFromGuest = useCallback(() => {
+    setUser(null);
+    setToken(null);
+    setIsGuest(false);
+    setLoading(false);
+  }, []);
+
   useEffect(() => {
     refreshSession();
   }, [refreshSession]);
@@ -207,6 +215,7 @@ export function AuthProvider({ children }) {
     signup,
     logout,
     continueAsGuest,
+    transitionFromGuest,
     requestPasswordReset,
     resetPassword,
     isOwner,

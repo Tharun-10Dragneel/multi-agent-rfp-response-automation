@@ -19,11 +19,21 @@ import { useAuth } from "@/contexts/AuthContext";
 
 export default function Header({ title, subtitle }) {
   const router = useRouter();
-  const { user, isAuthenticated, logout, isGuest, continueAsGuest } = useAuth();
+  const { user, isAuthenticated, logout, isGuest, continueAsGuest, transitionFromGuest } = useAuth();
 
   const handleLogout = () => {
     logout();
     router.push("/login");
+  };
+
+  const handleSignInFromGuest = () => {
+    transitionFromGuest();
+    router.push("/login");
+  };
+
+  const handleSignUpFromGuest = () => {
+    transitionFromGuest();
+    router.push("/signup");
   };
 
   const getInitials = (name) => {
@@ -144,17 +154,13 @@ export default function Header({ title, subtitle }) {
               <DropdownMenuSeparator />
               {isGuest && (
                 <>
-                  <DropdownMenuItem asChild>
-                    <Link href="/signup" className="cursor-pointer">
-                      <UserIcon className="mr-2 h-4 w-4" />
-                      Create Account
-                    </Link>
+                  <DropdownMenuItem onClick={handleSignUpFromGuest} className="cursor-pointer">
+                    <UserIcon className="mr-2 h-4 w-4" />
+                    Create Account
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/login" className="cursor-pointer">
-                      <LogIn className="mr-2 h-4 w-4" />
-                      Sign In
-                    </Link>
+                  <DropdownMenuItem onClick={handleSignInFromGuest} className="cursor-pointer">
+                    <LogIn className="mr-2 h-4 w-4" />
+                    Sign In
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                 </>

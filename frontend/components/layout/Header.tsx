@@ -19,7 +19,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 export default function Header({ title, subtitle }) {
   const router = useRouter();
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, logout, isGuest, continueAsGuest } = useAuth();
 
   const handleLogout = () => {
     logout();
@@ -49,6 +49,8 @@ export default function Header({ title, subtitle }) {
         return { label: "Member", variant: "secondary" };
       case "viewer":
         return { label: "Viewer", variant: "outline" };
+      case "guest":
+        return { label: "Guest", variant: "outline" };
       default:
         return { label: "User", variant: "secondary" };
     }
@@ -140,17 +142,43 @@ export default function Header({ title, subtitle }) {
                 </DropdownMenuItem>
               )}
               <DropdownMenuSeparator />
+              {isGuest && (
+                <>
+                  <DropdownMenuItem asChild>
+                    <Link href="/signup" className="cursor-pointer">
+                      <UserIcon className="mr-2 h-4 w-4" />
+                      Create Account
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/login" className="cursor-pointer">
+                      <LogIn className="mr-2 h-4 w-4" />
+                      Sign In
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                </>
+              )}
               <DropdownMenuItem 
                 onClick={handleLogout} 
                 className="text-destructive cursor-pointer focus:text-destructive"
               >
                 <LogOut className="mr-2 h-4 w-4" />
-                Sign out
+                {isGuest ? "Exit Guest Mode" : "Sign out"}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
           <div className="flex items-center gap-2">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="h-9"
+              onClick={continueAsGuest}
+            >
+              <UserIcon className="mr-2 h-4 w-4" />
+              Continue as Guest
+            </Button>
             <Link href="/login">
               <Button variant="ghost" size="sm" className="h-9">
                 <LogIn className="mr-2 h-4 w-4" />

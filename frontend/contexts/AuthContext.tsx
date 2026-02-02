@@ -9,6 +9,7 @@ export const USER_ROLES = {
   ADMIN: "admin",
   USER: "user",
   VIEWER: "viewer",
+  GUEST: "guest",
 };
 
 function mapSupabaseUser(user) {
@@ -43,18 +44,37 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isGuest, setIsGuest] = useState(false);
 
   const refreshSession = useCallback(async () => {
     try {
       const data = await fetchJson("/api/auth/session", { method: "GET" });
       setUser(mapSupabaseUser(data.user));
       setToken(data.accessToken || null);
+      setIsGuest(false); // Reset guest mode when checking session
     } catch {
       setUser(null);
       setToken(null);
+      setIsGuest(false); // Reset guest mode on error
     } finally {
       setLoading(false);
     }
+  }, []);
+
+  // Continue as guest function
+  const continueAsGuest = useCallback(() => {
+    const guestUser = {
+      id: "guest-user",
+      name: "Guest User",
+      email: "guest@example.com",
+      company: "",
+      role: USER_ROLES.GUEST,
+      createdAt: new Date().toISOString(),
+    };
+    setUser(guestUser);
+    setToken(null);
+    setIsGuest(true);
+    setLoading(false);
   }, []);
 
   useEffect(() => {
@@ -98,6 +118,7 @@ export function AuthProvider({ children }) {
     } finally {
       setToken(null);
       setUser(null);
+      setIsGuest(false);
     }
   }, []);
 
@@ -148,28 +169,28 @@ export function AuthProvider({ children }) {
   // Check if user can edit (owner or admin)
   const canEdit = useCallback(
     (resourceOwnerId) => {
-      if (!user) return false;
+      if (!user || isGuest) return false; // Guests cannot edit
       if (user.role === USER_ROLES.ADMIN) return true;
       return user.id === resourceOwnerId;
     },
-    [user]
+    [user, isGuest]
   );
 
   // Check if user can delete (owner or admin)
   const canDelete = useCallback(
     (resourceOwnerId) => {
-      if (!user) return false;
+      if (!user || isGuest) return false; // Guests cannot delete
       if (user.role === USER_ROLES.ADMIN) return true;
       return user.id === resourceOwnerId;
     },
-    [user]
+    [user, isGuest]
   );
 
   // Check if user can create resources
   const canCreate = useCallback(() => {
-    if (!user) return false;
+    if (!user || isGuest) return false; // Guests cannot create
     return user.role === USER_ROLES.ADMIN || user.role === USER_ROLES.USER;
-  }, [user]);
+  }, [user, isGuest]);
 
   // Get auth headers for API calls
   const getAuthHeader = useCallback(() => {
@@ -180,10 +201,12 @@ export function AuthProvider({ children }) {
     user,
     token,
     loading,
+    isGuest,
     isAuthenticated: !!user,
     login,
     signup,
     logout,
+    continueAsGuest,
     requestPasswordReset,
     resetPassword,
     isOwner,

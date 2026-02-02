@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/contexts/AuthContext";
+import { CardLoader } from "@/components/ui/spinner";
 
 const statusConfig = {
   pending: { label: "Pending", variant: "secondary", className: "bg-muted text-muted-foreground" },
@@ -19,8 +20,69 @@ const statusConfig = {
   submitted: { label: "Submitted", variant: "outline", className: "bg-primary/20 text-primary border-primary/30" },
 };
 
-export default function RFPTable({ rfps, onView, onProcess, onDownload, compact = false }) {
+export default function RFPTable({ rfps, onView, onProcess, onDownload, compact = false, loading = false }) {
   const { isGuest, canEdit } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="bg-card border border-border rounded-xl overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-border bg-secondary/30">
+                <th className="text-left text-xs font-medium text-muted-foreground px-5 py-4">
+                  RFP ID
+                </th>
+                <th className="text-left text-xs font-medium text-muted-foreground px-5 py-4">
+                  Title
+                </th>
+                {!compact && (
+                  <th className="text-left text-xs font-medium text-muted-foreground px-5 py-4">
+                    Client
+                  </th>
+                )}
+                <th className="text-left text-xs font-medium text-muted-foreground px-5 py-4">
+                  Due Date
+                </th>
+                <th className="text-left text-xs font-medium text-muted-foreground px-5 py-4">
+                  Status
+                </th>
+                <th className="text-right text-xs font-medium text-muted-foreground px-5 py-4">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {Array.from({ length: 5 }).map((_, index) => (
+                <tr key={index} className="border-b border-border hover:bg-secondary/20 transition-colors">
+                  <td className="px-5 py-4">
+                    <CardLoader lines={1} className="h-6" />
+                  </td>
+                  <td className="px-5 py-4">
+                    <CardLoader lines={2} className="h-6" />
+                  </td>
+                  {!compact && (
+                    <td className="px-5 py-4">
+                      <CardLoader lines={1} className="h-6" />
+                    </td>
+                  )}
+                  <td className="px-5 py-4">
+                    <CardLoader lines={1} className="h-6" />
+                  </td>
+                  <td className="px-5 py-4">
+                    <CardLoader lines={1} className="h-6" />
+                  </td>
+                  <td className="px-5 py-4 text-right">
+                    <CardLoader lines={1} className="h-6" />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="bg-card border border-border rounded-xl overflow-hidden">
       <div className="overflow-x-auto">

@@ -11,6 +11,7 @@ import AgentStatusCard from "@/components/dashboard/AgentStatusCard";
 import RFPTable from "@/components/dashboard/RFPTable";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Spinner, ButtonLoader } from "@/components/ui/spinner";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import {
@@ -33,7 +34,7 @@ import {
 
 export default function Dashboard() {
   const router = useRouter();
-  const { isAuthenticated, user, isGuest, canEdit, canCreate } = useAuth();
+  const { isAuthenticated, user, isGuest, canEdit, canCreate, transitionFromGuest } = useAuth();
   const [stats] = useState(mockDashboardStats);
   const [agents] = useState(mockAgentStatus);
   const [rfps, setRfps] = useState(mockRFPs);
@@ -88,6 +89,11 @@ export default function Dashboard() {
     });
   };
 
+  const handleSignUpFromGuest = () => {
+    transitionFromGuest();
+    router.push("/signup");
+  };
+
   return (
     <RequireAuth>
       <div className="flex h-screen bg-background">
@@ -129,18 +135,18 @@ export default function Dashboard() {
                 </p>
               </div>
               <div className="flex items-center gap-3">
-                <Button
-                  variant="outline"
-                  size="sm"
+                <ButtonLoader 
+                  loading={loading}
                   onClick={refreshData}
-                  disabled={loading}
-                  className="bg-transparent"
+                  className="bg-transparent border-border hover:bg-secondary text-foreground"
                 >
-                  <RefreshCw
-                    className={`w-4 h-4 mr-2 ${loading ? "animate-spin" : ""}`}
-                  />
-                  Refresh
-                </Button>
+                  {!loading && (
+                    <>
+                      <RefreshCw className="w-4 h-4 mr-2" />
+                      Refresh
+                    </>
+                  )}
+                </ButtonLoader>
                 {canCreate() && (
                   <Button size="sm" onClick={() => router.push("/rfps?new=1")}
                   >
@@ -152,7 +158,7 @@ export default function Dashboard() {
                   <Button 
                     size="sm" 
                     variant="outline" 
-                    onClick={() => router.push("/signup")}
+                    onClick={handleSignUpFromGuest}
                     className="border-border hover:bg-primary/10 hover:border-primary hover:text-primary transition-all duration-200"
                   >
                     <Sparkles className="w-4 h-4 mr-2" />
@@ -241,6 +247,7 @@ export default function Dashboard() {
                 onView={handleViewRFP}
                 onProcess={handleProcessRFP}
                 onDownload={handleDownloadResponse}
+                loading={loading}
               />
             </div>
           </div>

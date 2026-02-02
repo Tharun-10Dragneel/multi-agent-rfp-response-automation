@@ -38,47 +38,42 @@ export default function ChatInterface() {
     };
 
     setMessages((prev) => [...prev, userMessage]);
-    const userInput = input;
     setInput("");
     setLoading(true);
 
     try {
-      if (!sessionId) {
-        throw new Error("Session not ready");
-      }
       const response = await fetch("/api/chat", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
-          message: userInput,
-          session_id: sessionId,
+          message: input,
+          sessionId,
         }),
       });
 
-      const data = await response.json().catch(() => ({}));
       if (!response.ok) {
-        const errorMessage = data?.detail || data?.message || "Request failed.";
-        throw new Error(errorMessage);
+        throw new Error("Failed to send message");
       }
 
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          message: data.response || "No response received from the backend.",
-          timestamp: data.timestamp,
-          workflow_state: data.workflow_state,
-        },
-      ]);
+      const data = await response.json();
+
+      const assistantMessage = {
+        role: "assistant",
+        message: data.response,
+        timestamp: new Date().toISOString(),
+      };
+
+      setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          message: "❌ Error: Failed to process message. Please try again.",
-          timestamp: new Date().toISOString(),
-        },
-      ]);
+      console.error("Error sending message:", error);
+      const errorMessage = {
+        role: "assistant",
+        message: "Sorry, I encountered an error. Please try again.",
+        timestamp: new Date().toISOString(),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setLoading(false);
     }
@@ -100,18 +95,6 @@ export default function ChatInterface() {
 
   return (
     <div className={styles.chatInterface}>
-      <header className={styles.chatHeader}>
-        <div>
-          <h1>💬 Chat Assistant</h1>
-          <p>AI-powered RFP automation conversation</p>
-        </div>
-        <div className={styles.sessionInfo}>
-          {sessionId && (
-            <span className={styles.sessionBadge}>Session: {sessionId.slice(-8)}</span>
-          )}
-        </div>
-      </header>
-
       <div className={styles.chatMessages}>
         {messages.map((msg, idx) => (
           <div key={idx} className={`${styles.message} ${msg.role === "user" ? styles.user : styles.assistant}`}>

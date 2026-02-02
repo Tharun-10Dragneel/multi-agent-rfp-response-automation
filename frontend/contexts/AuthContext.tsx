@@ -46,20 +46,36 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [isGuest, setIsGuest] = useState(false);
 
+  // Initialize guest mode from localStorage
+  useEffect(() => {
+    const savedGuestMode = localStorage.getItem('isGuestMode');
+    if (savedGuestMode === 'true') {
+      continueAsGuest();
+    } else {
+      refreshSession();
+    }
+  }, []);
+
   const refreshSession = useCallback(async () => {
     try {
       const data = await fetchJson("/api/auth/session", { method: "GET" });
       setUser(mapSupabaseUser(data.user));
       setToken(data.accessToken || null);
-      setIsGuest(false); // Reset guest mode when checking session
+      // Only reset guest mode if we have a real authenticated user
+      if (data.user) {
+        setIsGuest(false);
+        localStorage.removeItem('isGuestMode');
+      }
     } catch {
-      setUser(null);
-      setToken(null);
-      setIsGuest(false); // Reset guest mode on error
+      // Don't reset guest mode on error - user might be in guest mode
+      if (!isGuest) {
+        setUser(null);
+        setToken(null);
+      }
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [isGuest]);
 
   // Continue as guest function
   const continueAsGuest = useCallback(() => {
@@ -74,7 +90,29 @@ export function AuthProvider({ children }) {
     setUser(guestUser);
     setToken(null);
     setIsGuest(true);
+    localStorage.setItem('isGuestMode', 'true');
     setLoading(false);
+  }, []);
+
+  // Transition from guest to login/signup
+  const transitionFromGuest = useCallback(() => {
+    setUser(null);
+    setToken(null);
+    setIsGuest(false);
+    localStorage.removeItem('isGuestMode');
+    setLoading(false);
+  }, []);
+
+  // Logout function
+  const logout = useCallback(async () => {
+    try {
+      await fetchJson("/api/auth/logout", { method: "POST" });
+    } finally {
+      setUser(null);
+      setToken(null);
+      setIsGuest(false);
+      localStorage.removeItem('isGuestMode');
+    }
   }, []);
 
   useEffect(() => {
@@ -110,17 +148,6 @@ export function AuthProvider({ children }) {
       return { success: false, error: error.message || "Signup failed" };
     }
   }, [refreshSession]);
-
-  // Logout function
-  const logout = useCallback(async () => {
-    try {
-      await fetchJson("/api/auth/logout", { method: "POST" });
-    } finally {
-      setToken(null);
-      setUser(null);
-      setIsGuest(false);
-    }
-  }, []);
 
   const requestPasswordReset = useCallback(async (email) => {
     try {
@@ -207,6 +234,7 @@ export function AuthProvider({ children }) {
     signup,
     logout,
     continueAsGuest,
+    transitionFromGuest,
     requestPasswordReset,
     resetPassword,
     isOwner,

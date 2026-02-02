@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Spinner, ButtonLoader, GuestModeLoader } from "@/components/ui/spinner";
 import { Loader2, Mail, Lock, AlertCircle, ArrowRight, Sparkles, Shield, Zap } from "lucide-react";
 
 export default function LoginPage() {
@@ -17,6 +18,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [guestLoading, setGuestLoading] = useState(false);
 
   useEffect(() => {
     if (authLoading) return;
@@ -47,12 +49,18 @@ export default function LoginPage() {
   };
 
   const handleGuestAccess = () => {
-    continueAsGuest();
-    router.push("/");
+    setGuestLoading(true);
+    // Faster loading for better UX
+    setTimeout(() => {
+      continueAsGuest();
+      router.push("/");
+    }, 800);
   };
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <>
+      {guestLoading && <GuestModeLoader />}
+      <div className="min-h-screen bg-background flex">
       {/* Left Side - Branding */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
         {/* Background pattern */}
@@ -135,7 +143,7 @@ export default function LoginPage() {
           </div>
 
           {/* Login Form */}
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} id="login-form" className="space-y-5">
             {error && (
               <Alert variant="destructive" className="bg-destructive/10 border-destructive/30">
                 <AlertCircle className="h-4 w-4" />
@@ -183,23 +191,18 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <Button 
-              type="submit" 
+            <ButtonLoader 
+              loading={loading}
+              type="submit"
               className="w-full h-11 font-medium"
-              disabled={loading}
             >
-              {loading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Signing in...
-                </>
-              ) : (
+              {!loading && (
                 <>
                   Sign In
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </>
               )}
-            </Button>
+            </ButtonLoader>
           </form>
 
           {/* Guest Access Option */}
@@ -213,14 +216,18 @@ export default function LoginPage() {
               </div>
             </div>
             
-            <Button 
-              variant="outline" 
-              className="w-full mt-4 h-11 font-medium border-border hover:bg-primary/10 hover:border-primary hover:text-primary transition-all duration-200"
+            <ButtonLoader 
+              loading={guestLoading}
               onClick={handleGuestAccess}
+              className="w-full mt-4 h-11 font-medium border-border hover:bg-primary/10 hover:border-primary hover:text-primary transition-all duration-200"
             >
-              <Sparkles className="mr-2 h-4 w-4" />
-              Continue as Guest
-            </Button>
+              {!guestLoading && (
+                <>
+                  <Sparkles className="mr-2 h-4 w-4" />
+                  Continue as Guest
+                </>
+              )}
+            </ButtonLoader>
             
             <p className="mt-2 text-center text-xs text-muted-foreground">
               Explore the platform with limited access
@@ -250,6 +257,7 @@ export default function LoginPage() {
           </p>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

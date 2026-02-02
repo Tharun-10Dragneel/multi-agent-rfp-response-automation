@@ -1,11 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import { Bell, Search, LogOut, LogIn, Settings, User as UserIcon, Shield, ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { ButtonLoader, GuestModeLoader } from "@/components/ui/spinner";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,11 +21,30 @@ import { useAuth } from "@/contexts/AuthContext";
 
 export default function Header({ title, subtitle }) {
   const router = useRouter();
-  const { user, isAuthenticated, logout, isGuest, continueAsGuest } = useAuth();
+  const { user, isAuthenticated, logout, isGuest, continueAsGuest, transitionFromGuest } = useAuth();
+  const [guestLoading, setGuestLoading] = useState(false);
 
   const handleLogout = () => {
     logout();
     router.push("/login");
+  };
+
+  const handleSignInFromGuest = () => {
+    transitionFromGuest();
+    router.push("/login");
+  };
+
+  const handleSignUpFromGuest = () => {
+    transitionFromGuest();
+    router.push("/signup");
+  };
+
+  const handleContinueAsGuest = () => {
+    setGuestLoading(true);
+    setTimeout(() => {
+      continueAsGuest();
+      router.push("/");
+    }, 800);
   };
 
   const getInitials = (name) => {
@@ -57,7 +78,9 @@ export default function Header({ title, subtitle }) {
   };
 
   return (
-    <header className="h-16 border-b border-border bg-background/80 backdrop-blur-sm flex items-center justify-between px-6 sticky top-0 z-40">
+    <>
+      {guestLoading && <GuestModeLoader />}
+      <header className="h-16 border-b border-border bg-background/80 backdrop-blur-sm flex items-center justify-between px-6 sticky top-0 z-40">
       <div>
         <h1 className="text-lg font-semibold text-foreground">{title}</h1>
         {subtitle && (
@@ -144,17 +167,13 @@ export default function Header({ title, subtitle }) {
               <DropdownMenuSeparator />
               {isGuest && (
                 <>
-                  <DropdownMenuItem asChild>
-                    <Link href="/signup" className="cursor-pointer">
-                      <UserIcon className="mr-2 h-4 w-4" />
-                      Create Account
-                    </Link>
+                  <DropdownMenuItem onClick={handleSignUpFromGuest} className="cursor-pointer">
+                    <UserIcon className="mr-2 h-4 w-4" />
+                    Create Account
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/login" className="cursor-pointer">
-                      <LogIn className="mr-2 h-4 w-4" />
-                      Sign In
-                    </Link>
+                  <DropdownMenuItem onClick={handleSignInFromGuest} className="cursor-pointer">
+                    <LogIn className="mr-2 h-4 w-4" />
+                    Sign In
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                 </>
@@ -169,30 +188,36 @@ export default function Header({ title, subtitle }) {
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
-          <div className="flex items-center gap-2">
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="h-9"
-              onClick={continueAsGuest}
-            >
-              <UserIcon className="mr-2 h-4 w-4" />
-              Continue as Guest
-            </Button>
-            <Link href="/login">
-              <Button variant="ghost" size="sm" className="h-9">
-                <LogIn className="mr-2 h-4 w-4" />
-                Sign In
-              </Button>
-            </Link>
-            <Link href="/signup">
-              <Button size="sm" className="h-9">
-                Get Started
-              </Button>
-            </Link>
-          </div>
+          !isGuest && (
+            <div className="flex items-center gap-2">
+              <ButtonLoader 
+                loading={guestLoading}
+                onClick={handleContinueAsGuest}
+                className="h-9 bg-transparent border-border hover:bg-secondary text-foreground"
+              >
+                {!guestLoading && (
+                  <>
+                    <UserIcon className="mr-2 h-4 w-4" />
+                    Continue as Guest
+                  </>
+                )}
+              </ButtonLoader>
+              <Link href="/login">
+                <Button variant="ghost" size="sm" className="h-9">
+                  <LogIn className="mr-2 h-4 w-4" />
+                  Sign In
+                </Button>
+              </Link>
+              <Link href="/signup">
+                <Button size="sm" className="h-9">
+                  Get Started
+                </Button>
+              </Link>
+            </div>
+          )
         )}
       </div>
     </header>
+    </>
   );
 }

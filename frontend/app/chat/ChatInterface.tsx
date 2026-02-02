@@ -18,7 +18,7 @@ export default function ChatInterface() {
       {
         role: "assistant",
         message:
-          "👋 Hi! I'm your RFP Assistant. I can help you scan tenders from tendersontime.com, analyze products, and generate pricing.\n\nTry: \"Scan for cable RFPs\" or \"Complete workflow for electrical tenders\"",
+          "Hello! I'm your RFP Assistant. I can help you scan tenders, analyze products, and generate pricing. How can I assist you today?",
         timestamp: new Date().toISOString(),
       },
     ]);
@@ -92,58 +92,60 @@ export default function ChatInterface() {
   };
 
   const quickActions = [
-    { label: "🔍 Scan RFPs", message: "Scan for cable and wire RFPs" },
-    { label: "⚡ Full Workflow", message: "Complete workflow for electrical tenders" },
-    { label: "📊 Show Status", message: "Show me the current status" },
-    { label: "💰 Pricing", message: "Calculate pricing for selected RFP" },
+    { label: "Scan RFPs", message: "Scan for cable and wire RFPs", icon: "🔍" },
+    { label: "Full Workflow", message: "Complete workflow for electrical tenders", icon: "⚡" },
+    { label: "Show Status", message: "Show me the current status", icon: "📊" },
+    { label: "Get Pricing", message: "Calculate pricing for selected RFP", icon: "💰" },
   ];
 
   return (
     <div className={styles.chatInterface}>
       <header className={styles.chatHeader}>
-        <div>
-          <h1>💬 Chat Assistant</h1>
-          <p>AI-powered RFP automation conversation</p>
-        </div>
-        <div className={styles.sessionInfo}>
-          {sessionId && (
-            <span className={styles.sessionBadge}>Session: {sessionId.slice(-8)}</span>
-          )}
+        <div className={styles.headerContent}>
+          <div className={styles.headerInfo}>
+            <h1>RFP Assistant</h1>
+            <p>AI-powered automation for your tender needs</p>
+          </div>
+          <div className={styles.sessionInfo}>
+            {sessionId && (
+              <span className={styles.sessionBadge}>Session {sessionId.slice(-6).toUpperCase()}</span>
+            )}
+          </div>
         </div>
       </header>
 
       <div className={styles.chatMessages}>
-        {messages.map((msg, idx) => (
-          <div key={idx} className={`${styles.message} ${msg.role === "user" ? styles.user : styles.assistant}`}>
-            <div className={styles.messageAvatar}>{msg.role === "user" ? "👤" : "🤖"}</div>
-            <div className={styles.messageContent}>
-              {msg.role === "assistant" ? (
-                <div className={styles.messageText}>
+        <div className={styles.welcomeMessage}>
+          <div className={styles.assistantBubble}>
+            <div className={styles.bubbleContent}>
+              <p>Hello! I'm your RFP Assistant. I can help you scan tenders, analyze products, and generate pricing. How can I assist you today?</p>
+            </div>
+            <div className={styles.bubbleTime}>Just now</div>
+          </div>
+        </div>
+
+        {messages.slice(1).map((msg, idx) => (
+          <div key={idx} className={`${styles.messageWrapper} ${msg.role === "user" ? styles.userWrapper : styles.assistantWrapper}`}>
+            <div className={`${styles.messageBubble} ${msg.role === "user" ? styles.userBubble : styles.assistantBubble}`}>
+              <div className={styles.bubbleContent}>
+                {msg.role === "assistant" ? (
                   <ReactMarkdown remarkPlugins={[remarkGfm]}>
                     {msg.message || ""}
                   </ReactMarkdown>
-                </div>
-              ) : (
-                <div className={styles.messageText}>
-                  {(msg.message || "").split("\n").map((line, i) => (
-                    <React.Fragment key={i}>
-                      {line}
-                      {i < (msg.message || "").split("\n").length - 1 && <br />}
-                    </React.Fragment>
-                  ))}
-                </div>
-              )}
-              <div className={styles.messageTime}>
-                {msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString() : ""}
+                ) : (
+                  <p>{msg.message}</p>
+                )}
+              </div>
+              <div className={styles.bubbleTime}>
+                {msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ""}
               </div>
             </div>
           </div>
         ))}
 
         {loading && (
-          <div className={`${styles.message} ${styles.assistant}`}>
-            <div className={styles.messageAvatar}>🤖</div>
-            <div className={styles.messageContent}>
+          <div className={styles.messageWrapper}>
+            <div className={`${styles.messageBubble} ${styles.assistantBubble}`}>
               <div className={styles.typingIndicator}>
                 <span></span>
                 <span></span>
@@ -155,34 +157,49 @@ export default function ChatInterface() {
         <div ref={messagesEndRef} />
       </div>
 
-      <div className={styles.quickActionsBar}>
-        {quickActions.map((action, idx) => (
-          <button
-            key={idx}
-            className={styles.quickActionBtn}
-            onClick={() => {
-              setInput(action.message);
-              setTimeout(() => sendMessage(), 100);
-            }}
-            type="button"
-          >
-            {action.label}
-          </button>
-        ))}
+      <div className={styles.quickActions}>
+        <div className={styles.quickActionsHeader}>
+          <span>Quick Actions</span>
+        </div>
+        <div className={styles.quickActionsGrid}>
+          {quickActions.map((action, idx) => (
+            <button
+              key={idx}
+              className={styles.quickActionCard}
+              onClick={() => {
+                setInput(action.message);
+                setTimeout(() => sendMessage(), 100);
+              }}
+              type="button"
+            >
+              <span className={styles.actionIcon}>{action.icon}</span>
+              <span className={styles.actionLabel}>{action.label}</span>
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className={styles.chatInputContainer}>
-        <textarea
-          className={styles.chatInput}
-          placeholder="Type your message... (e.g., 'Scan for cable RFPs')"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyPress}
-          rows={2}
-        />
-        <button className={styles.sendBtn} onClick={sendMessage} disabled={loading || !input.trim()} type="button">
-          {loading ? "⏳" : "📤"}
-        </button>
+        <div className={styles.inputWrapper}>
+          <textarea
+            className={styles.chatInput}
+            placeholder="Type your message..."
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyPress}
+            rows={1}
+          />
+          <button 
+            className={styles.sendButton} 
+            onClick={sendMessage} 
+            disabled={loading || !input.trim()} 
+            type="button"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M22 2L11 13M22 2l-7 20-4-9-9 4 20 7z"/>
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   );

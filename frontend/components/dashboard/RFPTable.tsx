@@ -10,6 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/contexts/AuthContext";
 
 const statusConfig = {
   pending: { label: "Pending", variant: "secondary", className: "bg-muted text-muted-foreground" },
@@ -19,6 +20,7 @@ const statusConfig = {
 };
 
 export default function RFPTable({ rfps, onView, onProcess, onDownload, compact = false }) {
+  const { isGuest, canEdit } = useAuth();
   return (
     <div className="bg-card border border-border rounded-xl overflow-hidden">
       <div className="overflow-x-auto">
@@ -142,15 +144,29 @@ export default function RFPTable({ rfps, onView, onProcess, onDownload, compact 
                             View Details
                           </DropdownMenuItem>
                           {rfp.status === "pending" && (
-                            <DropdownMenuItem onClick={() => onProcess?.(rfp)}>
+                            <DropdownMenuItem 
+                              onClick={() => onProcess?.(rfp)}
+                              disabled={isGuest || !canEdit(rfp.createdBy)}
+                              className={isGuest || !canEdit(rfp.createdBy) ? "opacity-50 cursor-not-allowed" : ""}
+                            >
                               <Play className="w-4 h-4 mr-2" />
                               Process RFP
+                              {(isGuest || !canEdit(rfp.createdBy)) && (
+                                <span className="ml-auto text-xs text-muted-foreground">Guest</span>
+                              )}
                             </DropdownMenuItem>
                           )}
                           {(rfp.status === "completed" || rfp.status === "submitted") && (
-                            <DropdownMenuItem onClick={() => onDownload?.(rfp)}>
+                            <DropdownMenuItem 
+                              onClick={() => onDownload?.(rfp)}
+                              disabled={isGuest || !canEdit(rfp.createdBy)}
+                              className={isGuest || !canEdit(rfp.createdBy) ? "opacity-50 cursor-not-allowed" : ""}
+                            >
                               <Download className="w-4 h-4 mr-2" />
                               Download Response
+                              {(isGuest || !canEdit(rfp.createdBy)) && (
+                                <span className="ml-auto text-xs text-muted-foreground">Guest</span>
+                              )}
                             </DropdownMenuItem>
                           )}
                         </DropdownMenuContent>

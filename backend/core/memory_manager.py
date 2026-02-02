@@ -9,7 +9,7 @@ import logging
 from langchain_core.messages import BaseMessage, HumanMessage, AIMessage
 from langchain.memory import ConversationBufferWindowMemory
 
-from .db.client import drizzle_client
+from .db.client import supabase_client
 
 logger = logging.getLogger(__name__)
 

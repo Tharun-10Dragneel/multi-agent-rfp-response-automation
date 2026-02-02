@@ -6,7 +6,7 @@ from datetime import datetime
 from typing import Optional
 import uuid
 
-from drizzle import (
+from drizzle_orm import (
     Column,
     Integer,
     String,
@@ -17,24 +17,24 @@ from drizzle import (
     UUID,
     ForeignKey,
     Table,
-    Enum
+    Enum as DrizzleEnum,
 )
-from drizzle.orm import relationship
+from drizzle_orm import relationship
 
 
 # Enums
-class UserRole(Enum):
+class UserRole:
     SALES = "sales"
     MANAGER = "manager"
     ADMIN = "admin"
 
 
-class MessageType(Enum):
+class MessageType:
     USER = "user"
     ASSISTANT = "assistant"
 
 
-class InteractionType(Enum):
+class InteractionType:
     RESPONSE = "response"
     TOOL_CALL = "tool_call"
     ERROR = "error"
@@ -46,7 +46,7 @@ users_table = Table(
     Column("id", UUID, primary_key=True, default=uuid.uuid4),
     Column("name", String(255), nullable=False),
     Column("email", String(255), nullable=False, unique=True),
-    Column("role", Enum(UserRole), nullable=False, default=UserRole.SALES),
+    Column("role", DrizzleEnum("user_role", [UserRole.SALES, UserRole.MANAGER, UserRole.ADMIN]), nullable=False, default=UserRole.SALES),
     Column("manager_id", UUID, ForeignKey("users_table.id")),
     Column("created_at", DateTime, default=datetime.utcnow),
 )
@@ -110,7 +110,7 @@ chat_messages_table = Table(
     "chat_messages",
     Column("id", UUID, primary_key=True, default=uuid.uuid4),
     Column("session_id", String(255), nullable=False),
-    Column("message_type", Enum(MessageType), nullable=False),
+    Column("message_type", DrizzleEnum("message_type", [MessageType.USER, MessageType.ASSISTANT]), nullable=False),
     Column("content", Text, nullable=False),
     Column("metadata", JSON, default=dict),
     Column("created_at", DateTime, default=datetime.utcnow),
@@ -122,7 +122,7 @@ agent_interactions_table = Table(
     Column("id", UUID, primary_key=True, default=uuid.uuid4),
     Column("session_id", String(255), nullable=False),
     Column("agent_name", String(100), nullable=False),
-    Column("interaction_type", Enum(InteractionType), default=InteractionType.RESPONSE),
+    Column("interaction_type", DrizzleEnum("interaction_type", [InteractionType.RESPONSE, InteractionType.TOOL_CALL, InteractionType.ERROR]), default=InteractionType.RESPONSE),
     Column("input_data", JSON, default=dict),
     Column("output_data", JSON, default=dict),
     Column("reasoning", Text),

@@ -5,8 +5,7 @@ pydantic==2.7.4
 python-multipart==0.0.6
 
 # Database
-drizzle-orm==0.29.4
-psycopg2-binary==2.9.9
+supabase==2.3.0
 
 # LLM Integration
 langchain-groq==0.0.1

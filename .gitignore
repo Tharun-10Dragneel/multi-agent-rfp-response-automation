@@ -3,6 +3,7 @@
 __pycache__
 .DS_Store
 *.tgz
+.anchor
 
 # dependencies
 frontend/node_modules

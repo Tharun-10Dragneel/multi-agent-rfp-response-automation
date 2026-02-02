@@ -179,7 +179,7 @@ export default function HistoryPage() {
                   </SelectContent>
                 </Select>
 
-                <Button variant="outline" onClick={handleExportHistory} disabled={exporting}>
+                <Button variant="outline" onClick={handleExportHistory} disabled={exporting} className="hover:bg-primary hover:text-white hover:border-primary">
                   {exporting ? (
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                   ) : (

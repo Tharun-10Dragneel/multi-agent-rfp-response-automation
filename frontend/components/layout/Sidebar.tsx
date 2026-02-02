@@ -76,7 +76,7 @@ const navItems = [
 
 export default function Sidebar() {
   const pathname = usePathname();
-  const { isAuthenticated, user } = useAuth();
+  const { user, isAuthenticated, isGuest, initialized } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
   const [expandedItems, setExpandedItems] = useState(["Agents"]);
 
@@ -95,7 +95,7 @@ export default function Sidebar() {
 
   const canAccessItem = (item) => {
     if (!item.requiresAuth) return true;
-    return isAuthenticated;
+    return initialized && isAuthenticated;
   };
 
   return (
@@ -231,35 +231,32 @@ export default function Sidebar() {
       </nav>
 
       {/* Footer - User Info */}
-      {!collapsed && (
+      {!collapsed && initialized && isAuthenticated && (
         <div className="p-4 border-t border-sidebar-border">
-          {isAuthenticated ? (
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
-                <span className="text-xs font-medium text-primary">
-                  {user?.name?.charAt(0)?.toUpperCase() || "U"}
-                </span>
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-sidebar-foreground truncate">
-                  {user?.name}
-                </p>
-                <p className="text-xs text-muted-foreground truncate">
-                  {user?.role === "admin" ? "Administrator" : "Member"}
-                </p>
-              </div>
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+              <span className="text-xs font-medium text-primary">
+                {user?.name?.charAt(0)?.toUpperCase() || "U"}
+              </span>
             </div>
-          ) : (
-            <div className="text-center">
-              <p className="text-xs text-muted-foreground mb-2">Guest Mode</p>
-              <Link
-                href="/login"
-                className="text-xs text-primary hover:underline font-medium"
-              >
-                Sign in for full access
-              </Link>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-sidebar-foreground truncate">
+                {user?.name}
+              </p>
+              <p className="text-xs text-muted-foreground truncate">
+                {user?.role === "admin" ? "Administrator" : "Member"}
+              </p>
             </div>
-          )}
+          </div>
+        </div>
+      )}
+      
+      {/* Loading placeholder during initialization */}
+      {!collapsed && !initialized && (
+        <div className="p-4 border-t border-sidebar-border">
+          <div className="w-8 h-8 rounded-full bg-muted animate-pulse mb-2" />
+          <div className="h-4 bg-muted animate-pulse rounded mb-1" />
+          <div className="h-3 bg-muted animate-pulse rounded w-3/4" />
         </div>
       )}
     </aside>

@@ -463,7 +463,7 @@ export default function ProductsPage() {
             </div>
 
             <div className="flex items-center gap-3">
-              <Button variant="outline" className="bg-transparent">
+              <Button variant="outline" className="bg-transparent hover:bg-primary hover:text-white hover:border-primary">
                 <Upload className="w-4 h-4 mr-2" />
                 Import CSV
               </Button>

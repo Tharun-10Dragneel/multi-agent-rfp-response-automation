@@ -21,7 +21,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 export default function Header({ title, subtitle }) {
   const router = useRouter();
-  const { user, isAuthenticated, logout, isGuest, continueAsGuest, transitionFromGuest } = useAuth();
+  const { user, isAuthenticated, logout, isGuest, continueAsGuest, transitionFromGuest, loading, initialized } = useAuth();
   const [guestLoading, setGuestLoading] = useState(false);
 
   const handleLogout = () => {
@@ -105,8 +105,10 @@ export default function Header({ title, subtitle }) {
           <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-primary rounded-full" />
         </Button>
 
-        {/* User Menu */}
-        {isAuthenticated ? (
+        {/* User Menu - Show loading state or nothing during initialization */}
+        {!initialized ? (
+          <div className="w-9 h-9 rounded-full bg-muted animate-pulse" />
+        ) : isAuthenticated ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-9 px-2 gap-2">

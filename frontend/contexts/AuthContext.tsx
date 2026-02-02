@@ -43,18 +43,32 @@ async function fetchJson(url, options) {
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Start with false instead of true
   const [isGuest, setIsGuest] = useState(false);
+  const [initialized, setInitialized] = useState(false);
 
   // Initialize guest mode from localStorage
   useEffect(() => {
     const savedGuestMode = localStorage.getItem('isGuestMode');
     if (savedGuestMode === 'true') {
+      // Immediately set guest state without loading state
       continueAsGuest();
     } else {
       refreshSession();
     }
+    setInitialized(true);
   }, []);
+
+  // Set a timeout to prevent infinite loading
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (loading) {
+        setLoading(false);
+      }
+    }, 2000); // Max 2 seconds loading
+
+    return () => clearTimeout(timeout);
+  }, [loading]);
 
   const refreshSession = useCallback(async () => {
     try {
@@ -66,14 +80,15 @@ export function AuthProvider({ children }) {
         setIsGuest(false);
         localStorage.removeItem('isGuestMode');
       }
-    } catch {
+    } catch (error) {
       // Don't reset guest mode on error - user might be in guest mode
+      // Only clear user state if we're not in guest mode
       if (!isGuest) {
         setUser(null);
         setToken(null);
       }
     } finally {
-      setLoading(false);
+      // Don't set loading to false here since we start with false
     }
   }, [isGuest]);
 
@@ -91,7 +106,7 @@ export function AuthProvider({ children }) {
     setToken(null);
     setIsGuest(true);
     localStorage.setItem('isGuestMode', 'true');
-    setLoading(false);
+    // Don't set loading to false here since we start with false
   }, []);
 
   // Transition from guest to login/signup
@@ -114,10 +129,6 @@ export function AuthProvider({ children }) {
       localStorage.removeItem('isGuestMode');
     }
   }, []);
-
-  useEffect(() => {
-    refreshSession();
-  }, [refreshSession]);
 
   // Login function
   const login = useCallback(async (email, password) => {
@@ -229,6 +240,7 @@ export function AuthProvider({ children }) {
     token,
     loading,
     isGuest,
+    initialized,
     isAuthenticated: !!user,
     login,
     signup,

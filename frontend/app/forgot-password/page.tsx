@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
@@ -17,6 +17,7 @@ export default function ForgotPasswordPage() {
   const searchParams = useSearchParams();
   const { requestPasswordReset, resetPassword } = useAuth();
   const token = useMemo(() => searchParams.get("token") || "", [searchParams]);
+  const [hasRecoverySession, setHasRecoverySession] = useState(false);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -48,11 +49,26 @@ export default function ForgotPasswordPage() {
     setSuccess(true);
   };
 
+  useEffect(() => {
+    const loadSession = async () => {
+      try {
+        const response = await fetch("/api/auth/session");
+        if (!response.ok) return;
+        const data = await response.json();
+        setHasRecoverySession(!!data.user);
+      } catch {
+        setHasRecoverySession(false);
+      }
+    };
+
+    loadSession();
+  }, []);
+
   const handleResetPassword = async (event) => {
     event.preventDefault();
     setError("");
 
-    if (!token) {
+    if (!token && !hasRecoverySession) {
       setError("Invalid reset link");
       return;
     }
@@ -83,9 +99,11 @@ export default function ForgotPasswordPage() {
     <div className="min-h-screen bg-background flex items-center justify-center p-6">
       <Card className="w-full max-w-lg border-border">
         <CardHeader>
-          <CardTitle className="text-xl">{token ? "Set a new password" : "Reset your password"}</CardTitle>
+          <CardTitle className="text-xl">
+            {token || hasRecoverySession ? "Set a new password" : "Reset your password"}
+          </CardTitle>
           <CardDescription>
-            {token
+            {token || hasRecoverySession
               ? "Choose a strong password for your account."
               : "We will send a secure reset link to your registered email."}
           </CardDescription>
@@ -103,16 +121,18 @@ export default function ForgotPasswordPage() {
               <div className="flex items-center gap-3 rounded-lg border border-success/30 bg-success/10 px-3 py-3 text-success">
                 <CheckCircle2 className="h-5 w-5" />
                 <div>
-                  <p className="text-sm font-medium">{token ? "Password updated" : "Email sent"}</p>
+                  <p className="text-sm font-medium">
+                    {token || hasRecoverySession ? "Password updated" : "Email sent"}
+                  </p>
                   <p className="text-xs text-muted-foreground">
-                    {token
+                    {token || hasRecoverySession
                       ? "You can now sign in with your new password."
                       : "Check your inbox for the reset link. It may take a minute."}
                   </p>
                 </div>
               </div>
 
-              {!token && resetUrl && (
+              {!token && !hasRecoverySession && resetUrl && (
                 <Alert className="bg-secondary/50 border-border">
                   <AlertDescription>
                     <Link href={resetUrl} className="text-primary hover:underline font-medium">
@@ -125,7 +145,7 @@ export default function ForgotPasswordPage() {
                 <Button onClick={() => router.push("/login")} className="w-full">
                   Back to Sign In
                 </Button>
-                {!token && (
+                {!token && !hasRecoverySession && (
                   <Button
                     variant="outline"
                     onClick={() => {
@@ -139,7 +159,7 @@ export default function ForgotPasswordPage() {
                 )}
               </div>
             </div>
-          ) : token ? (
+          ) : token || hasRecoverySession ? (
             <form onSubmit={handleResetPassword} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="password">New password</Label>

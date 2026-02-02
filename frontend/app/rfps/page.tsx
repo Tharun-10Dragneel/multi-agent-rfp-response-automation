@@ -296,6 +296,10 @@ export default function RFPsPage() {
                       variant={statusFilter === tab.key ? "default" : "outline"}
                       size="sm"
                       onClick={() => setStatusFilter(tab.key)}
+                      className={statusFilter === tab.key 
+                        ? "bg-primary text-white hover:bg-primary/90" 
+                        : "hover:bg-primary hover:text-white hover:border-primary"
+                      }
                     >
                       {tab.label}
                       <Badge variant="secondary" className="ml-2 bg-secondary/80">

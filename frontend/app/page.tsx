@@ -34,11 +34,11 @@ import {
 
 export default function Dashboard() {
   const router = useRouter();
-  const { isAuthenticated, user, isGuest, canEdit, canCreate, transitionFromGuest } = useAuth();
+  const { user, isGuest, initialized, canEdit, canCreate, transitionFromGuest } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [stats] = useState(mockDashboardStats);
   const [agents] = useState(mockAgentStatus);
   const [rfps, setRfps] = useState(mockRFPs);
-  const [loading, setLoading] = useState(false);
 
   const refreshData = async () => {
     setLoading(true);
@@ -112,14 +112,14 @@ export default function Dashboard() {
                   <h2 className="text-xl font-semibold text-foreground">
                     Welcome back, {user?.name?.split(" ")[0]}
                   </h2>
-                  {isGuest && (
+                  {initialized && isGuest && (
                     <Badge variant="outline" className="text-xs">
                       Guest Mode
                     </Badge>
                   )}
                 </div>
                 <p className="text-sm text-muted-foreground mt-1">
-                  {isGuest 
+                  {initialized && isGuest 
                     ? "You're viewing in guest mode. Sign in to access all features."
                     : "Here's what's happening with your RFP pipeline today."
                   }
